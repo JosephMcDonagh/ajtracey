@@ -2,9 +2,7 @@ package com.thg.accelerator23.connectn.ai.ajtracey;
 
 import com.thehutgroup.accelerator.connectn.player.*;
 import com.thg.accelerator23.connectn.ai.ajtracey.analysis.BoardAnalyser;
-import com.thg.accelerator23.connectn.ai.ajtracey.analysis.GameState;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,9 +24,7 @@ public class LiveAndDirect extends Player {
     } else {
         List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
         Random randomGen = new Random();
-          System.out.println(theseAllHaveTheSameBinaryValue);
         int thisXToBeUsed = randomGen.nextInt(theseAllHaveTheSameBinaryValue.size());
-          System.out.println(thisXToBeUsed);
         return theseAllHaveTheSameBinaryValue.get(thisXToBeUsed);
       }
 
