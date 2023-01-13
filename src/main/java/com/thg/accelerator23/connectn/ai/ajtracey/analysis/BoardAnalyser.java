@@ -139,6 +139,8 @@ public class BoardAnalyser {
     }
 
     public List<Integer> returnsXValueForOurBestMove(Board board, Counter counter){
+        Queue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((a,b) -> {return b.getValue() - a.getValue();});
+
         Map<Integer, Integer> xAndCorrespondingBinaryValue = new HashMap<>(boardWidth);
         for(int i=0; i<boardWidth; i++){
             xAndCorrespondingBinaryValue.put(i, returnsBinaryValueOfOurMoveForAGivenX(i, board, counter));
@@ -224,19 +226,13 @@ public class BoardAnalyser {
                 else if(numberInARow.equals(currentBoard.getConfig().getnInARowForWin()-2) && !currentBoard.hasCounterAtPosition(line.getCurrentPosition())){
                     Position blankSpacePotentiallyWinning = line.getCurrentPosition();
                     line.next();
-                    if(line.isCounterInCurrentPosition() && line.getCounterInCurrentPosition() == counterToTest && currentBoard.hasCounterAtPosition(line.getCurrentPosition()) && currentBoard.isWithinBoard(line.getCurrentPosition())){
+                    if(line.isCounterInCurrentPosition() && line.getCounterInCurrentPosition() == counterToTest && currentBoard.hasCounterAtPosition(line.getCurrentPosition()) && currentBoard.isWithinBoard(blankSpacePotentiallyWinning)){
                         positionsOfWinningBoard.add(blankSpacePotentiallyWinning);
                     }
                 }
             }
 
         });
-
-
-        System.out.println(positionsOfWinningBoard.size() + " winning spaces");
-        System.out.println(positionsOfWinningBoard);
-
-
         return positionsOfWinningBoard;
     }
 
@@ -244,7 +240,10 @@ public class BoardAnalyser {
         List<Position> theirWinningPositions = returnListOfPositionsForAWinCase(theirCounter, board);
         List<Position> blackList = new ArrayList<>();
         for (Position position: theirWinningPositions) {
-            blackList.add(new Position(position.getX(), position.getY() -1));
+            Position newPosition = new Position(position.getX(), position.getY() -1);
+            if(board.isWithinBoard(newPosition) && !board.hasCounterAtPosition(newPosition)) {
+                blackList.add(new Position(position.getX(), position.getY() - 1));
+            }
         }
         return blackList;
     }

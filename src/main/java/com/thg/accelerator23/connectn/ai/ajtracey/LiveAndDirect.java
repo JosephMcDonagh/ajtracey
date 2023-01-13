@@ -22,6 +22,9 @@ public class LiveAndDirect extends Player {
     List<Position> winningPositions = BA.returnListOfPositionsForAWinCase(getCounter(), board);
     List<Position> stopTheirWinPositions = BA.returnListOfPositionsForAWinCase(getCounter().getOther(), board);
     List<Position> blackList =  BA.returnBlackListOfPositions(getCounter().getOther(), board);
+    blackList.forEach(position -> {
+        System.out.println(position.getX() + ", "  + position.getY());
+    });
 
 
     for(int i = 0; i<winningPositions.size(); i++) {
@@ -38,14 +41,20 @@ public class LiveAndDirect extends Player {
     List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
     Random randomGen = new Random();
 
-      for (int xValue: theseAllHaveTheSameBinaryValue) {
-
-
+    List<Position> positionsWeCanGoIn = new ArrayList<>();
+      for (Position position: currentPositions) {
+        if(theseAllHaveTheSameBinaryValue.contains(position.getX()) && !blackList.contains(position)){
+            positionsWeCanGoIn.add(position);
+        }
       }
 
-    int thisXToBeUsed = randomGen.nextInt(theseAllHaveTheSameBinaryValue.size());
+      positionsWeCanGoIn.forEach(position -> {
+          System.out.println(position.getX() + ", "  + position.getY() +" position allowed");
+      });
 
-    return theseAllHaveTheSameBinaryValue.get(thisXToBeUsed);
+    int thisXToBeUsed = randomGen.nextInt(positionsWeCanGoIn.size());
+
+    return positionsWeCanGoIn.get(thisXToBeUsed).getX();
 
 
     //TODO: some crazy analysis
