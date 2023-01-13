@@ -4,9 +4,7 @@ import com.thehutgroup.accelerator.connectn.player.*;
 import com.thg.accelerator23.connectn.ai.ajtracey.analysis.BoardAnalyser;
 import com.thg.accelerator23.connectn.ai.ajtracey.analysis.GameState;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class LiveAndDirect extends Player {
@@ -38,23 +36,22 @@ public class LiveAndDirect extends Player {
         }
     }
 
-    List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
-    Random randomGen = new Random();
+    Queue<Map.Entry<Integer, Integer>> queueOfBinaryValues = BA.returnsXValueForOurBestMove(board, getCounter());
 
-    List<Position> positionsWeCanGoIn = new ArrayList<>();
-      for (Position position: currentPositions) {
-        if(theseAllHaveTheSameBinaryValue.contains(position.getX()) && !blackList.contains(position)){
-            positionsWeCanGoIn.add(position);
+    Integer xValueWeCanGoIn = queueOfBinaryValues.peek().getKey();
+
+    while(!queueOfBinaryValues.isEmpty()){
+        System.out.println(queueOfBinaryValues.peek().getKey());
+        Integer xValue = queueOfBinaryValues.poll().getKey();
+        for (Position position: currentPositions) {
+            if(xValue.equals(position.getX()) && !blackList.contains(position) && board.isWithinBoard(position)){
+                System.out.println(position.getX());
+                return(position.getX());
+            }
         }
-      }
+    }
 
-      positionsWeCanGoIn.forEach(position -> {
-          System.out.println(position.getX() + ", "  + position.getY() +" position allowed");
-      });
-
-    int thisXToBeUsed = randomGen.nextInt(positionsWeCanGoIn.size());
-
-    return positionsWeCanGoIn.get(thisXToBeUsed).getX();
+    return xValueWeCanGoIn;
 
 
     //TODO: some crazy analysis

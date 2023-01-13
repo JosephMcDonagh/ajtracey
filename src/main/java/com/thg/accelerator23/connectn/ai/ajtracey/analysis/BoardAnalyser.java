@@ -138,32 +138,28 @@ public class BoardAnalyser {
         return theBinaryValueOfThisChaos;
     }
 
-    public List<Integer> returnsXValueForOurBestMove(Board board, Counter counter){
+    public Queue<Map.Entry<Integer, Integer>> returnsXValueForOurBestMove(Board board, Counter counter){
         Queue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((a,b) -> {return b.getValue() - a.getValue();});
 
         Map<Integer, Integer> xAndCorrespondingBinaryValue = new HashMap<>(boardWidth);
         for(int i=0; i<boardWidth; i++){
             xAndCorrespondingBinaryValue.put(i, returnsBinaryValueOfOurMoveForAGivenX(i, board, counter));
         }
-        System.out.println(xAndCorrespondingBinaryValue);
-        List<Map.Entry<Integer, Integer>> valueToUse = xAndCorrespondingBinaryValue.entrySet().stream().toList();
-        int currentMaxInt = Integer.MIN_VALUE;
-        int xValueToUse = Math.floorDiv(boardWidth, 2);
-        List<Integer> xValuesWhichCanBeUsed = new ArrayList<>();
-        for(int i=0; i<valueToUse.size(); i++) {
-            if(valueToUse.get(i).getValue() > currentMaxInt) {
-                currentMaxInt = valueToUse.get(i).getValue();
-                xValueToUse = valueToUse.get(i).getKey();
-                xValuesWhichCanBeUsed = new ArrayList<>();
-                xValuesWhichCanBeUsed.add(xValueToUse);
+        for(Map.Entry<Integer, Integer> entry : xAndCorrespondingBinaryValue.entrySet()){
+            if(entry.getValue() != Integer.MIN_VALUE) {
+                queue.add(entry);
             }
-            else if(valueToUse.get(i).getValue().equals(currentMaxInt)){
-                xValuesWhichCanBeUsed.add(valueToUse.get(i).getKey());
-            }
+        }
+        Queue<Map.Entry<Integer, Integer>> queueTest = queue;
+        while(!queueTest.isEmpty()){
+            System.out.print(queueTest.poll() + " ");
+        }
+        for(Map.Entry<Integer, Integer> entry : xAndCorrespondingBinaryValue.entrySet()){
+            queue.add(entry);
         }
 
 
-        return xValuesWhichCanBeUsed;
+        return queue;
     }
 
 
