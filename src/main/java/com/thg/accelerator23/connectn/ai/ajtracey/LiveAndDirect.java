@@ -14,7 +14,6 @@ public class LiveAndDirect extends Player {
   public int makeMove(Board board) {
     BoardAnalyser BA = new BoardAnalyser(board.getConfig());
 
-
     List<Position> currentPositions = BA.getNextPositions(board);
 
     List<Position> winningPositions = BA.returnListOfPositionsForAWinCase(getCounter(), board);
