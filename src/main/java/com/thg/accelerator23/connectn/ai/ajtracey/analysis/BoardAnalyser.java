@@ -144,7 +144,6 @@ public class BoardAnalyser {
         for(int i=0; i<boardWidth; i++){
             xAndCorrespondingBinaryValue.put(i, returnsBinaryValueOfOurMoveForAGivenX(i, board, counter));
         }
-        System.out.println(xAndCorrespondingBinaryValue);
         List<Map.Entry<Integer, Integer>> valueToUse = xAndCorrespondingBinaryValue.entrySet().stream().toList();
         int currentMaxInt = Integer.MIN_VALUE;
         int xValueToUse = Math.floorDiv(boardWidth, 2);
@@ -231,11 +230,6 @@ public class BoardAnalyser {
             }
 
         });
-
-
-        System.out.println(positionsOfWinningBoard.size() + " winning spaces");
-        System.out.println(positionsOfWinningBoard);
-
 
         return positionsOfWinningBoard;
     }
@@ -348,13 +342,13 @@ public class BoardAnalyser {
         List<Position> positionsForNextIndex = new ArrayList<>();
         columns.forEach(column -> {
             boolean notYetFound = true;
-            if(!column.isCounterInCurrentPosition()){
+            if(!column.isCounterInCurrentPosition() && board.isWithinBoard(column.getCurrentPosition())){
                 positionsForNextIndex.add(column.getCurrentPosition());
                 notYetFound = false;
             }
             while(column.hasNext() && notYetFound){
                 column.next();
-                if(!column.isCounterInCurrentPosition()){
+                if(!column.isCounterInCurrentPosition() && board.isWithinBoard(column.getCurrentPosition())){
                     positionsForNextIndex.add(column.getCurrentPosition());
                     notYetFound = false;
                 }

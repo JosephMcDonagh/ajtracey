@@ -3,23 +3,25 @@ package com.thg.accelerator23.connectn.ai.ajtracey;
 import com.thehutgroup.accelerator.connectn.player.*;
 import com.thg.accelerator23.connectn.ai.ajtracey.analysis.BoardAnalyser;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class LiveAndDirect extends Player {
   public LiveAndDirect(Counter counter) {
     super(counter, LiveAndDirect.class.getName());
   }
-
   @Override
   public int makeMove(Board board) {
     BoardAnalyser BA = new BoardAnalyser(board.getConfig());
 
-
     List<Position> currentPositions = BA.getNextPositions(board);
+
     List<Position> winningPositions = BA.returnListOfPositionsForAWinCase(getCounter(), board);
+
     List<Position> stopTheirWinPositions = BA.returnListOfPositionsForAWinCase(getCounter().getOther(), board);
+
+     List<Position> otherBlackList = BA.returnBlackListOfPositions(getCounter(), board);
+
     List<Position> blackList =  BA.returnBlackListOfPositions(getCounter().getOther(), board);
 
 
@@ -34,20 +36,28 @@ public class LiveAndDirect extends Player {
         }
     }
 
-    List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
     Random randomGen = new Random();
+    List<Integer> positionsWeAreAllowedToUse = new ArrayList<>(board.getConfig().getWidth());
+    List<Integer> positionsWeAreAllowedToUseBL2 = new ArrayList<>(board.getConfig().getWidth());
 
-      for (int xValue: theseAllHaveTheSameBinaryValue) {
-
-
+      for (Position position: currentPositions) {
+        if(!otherBlackList.contains(position)){
+            positionsWeAreAllowedToUse.add(position.getX());
+        }
+        else{
+            for(Position posInBlackList: blackList){
+                if(posInBlackList.getX() != position.getX() && posInBlackList.getY() != position.getY()){
+                    positionsWeAreAllowedToUse.add(position.getX());
+                }
+            }
+        }
       }
 
-    int thisXToBeUsed = randomGen.nextInt(theseAllHaveTheSameBinaryValue.size());
 
-    return theseAllHaveTheSameBinaryValue.get(thisXToBeUsed);
+    int thisXToBeUsed = randomGen.nextInt(positionsWeAreAllowedToUse.size());
+
+    return positionsWeAreAllowedToUse.get(thisXToBeUsed);
 
 
-    //TODO: some crazy analysis
-    //TODO: make sure said analysis uses less than 2G of heap and returns within 10 seconds on whichever machine is running it
-  }
+    }
 }
