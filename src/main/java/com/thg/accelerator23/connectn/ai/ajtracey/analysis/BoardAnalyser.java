@@ -272,8 +272,8 @@ public class BoardAnalyser {
         for (int i=0; i<board.getConfig().getWidth();i++) {
             try {
                 Board futureBoard = new Board(board, i, counter);
-                List<Line> lines = getLines(futureBoard);
-                for(Line line:lines){
+                List<BoardLine> lines = getLines(futureBoard);
+                for(BoardLine line:lines){
                     if(getBestRunByColour(line).get(counter)==(board.getConfig().getnInARowForWin()-(4-nInARow))){
                         return true;
                     }
@@ -289,7 +289,7 @@ public class BoardAnalyser {
         for (int i=0; i<board.getConfig().getWidth();i++) {
             try {
                 Board futureBoard = new Board(board, i, counter);
-                List<Line> lines = getLines(futureBoard);
+                List<BoardLine> lines = getLines(futureBoard);
                 for(Line line:lines){
                     if(getBestRunByColour(line).get(counter)==(board.getConfig().getnInARowForWin()-(4-nInARow))){
                         return i;
