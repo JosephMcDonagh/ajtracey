@@ -120,7 +120,7 @@ public class BoardAnalyser {
         return dataOfOutcome;
     }
 
-    private int returnsBinaryValueOfOurMoveForAGivenX(int potentialSpaceWeCanTake, Board board, Counter counter){
+    public int returnsBinaryValueOfOurMoveForAGivenX(int potentialSpaceWeCanTake, Board board, Counter counter){
         int theBinaryValueOfThisChaos;
         try {
             Board boardAfterOurMove = new Board(board, potentialSpaceWeCanTake, counter);
@@ -163,7 +163,6 @@ public class BoardAnalyser {
 
         return xValuesWhichCanBeUsed;
     }
-
 
     public GameState calculateGameState(Board board) {
         List<BoardLine> lines = getLines(board);
@@ -265,6 +264,40 @@ public class BoardAnalyser {
                     return i;
                 }
             } catch (InvalidMoveException e){}
+        }
+        return -1;
+    }
+
+    public boolean isNInARowPossible(Counter counter, Board board, int nInARow){
+        for (int i=0; i<board.getConfig().getWidth();i++) {
+            try {
+                Board futureBoard = new Board(board, i, counter);
+                List<Line> lines = getLines(futureBoard);
+                for(Line line:lines){
+                    if(getBestRunByColour(line).get(counter)==(board.getConfig().getnInARowForWin()-(4-nInARow))){
+                        return true;
+                    }
+                }
+
+            }catch (InvalidMoveException e){
+            }
+        }
+        return false;
+    }
+
+    public int NInARowPosition(Counter counter, Board board, int nInARow){
+        for (int i=0; i<board.getConfig().getWidth();i++) {
+            try {
+                Board futureBoard = new Board(board, i, counter);
+                List<Line> lines = getLines(futureBoard);
+                for(Line line:lines){
+                    if(getBestRunByColour(line).get(counter)==(board.getConfig().getnInARowForWin()-(4-nInARow))){
+                        return i;
+                    }
+                }
+
+            }catch (InvalidMoveException e){
+            }
         }
         return -1;
     }

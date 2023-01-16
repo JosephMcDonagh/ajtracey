@@ -2,7 +2,6 @@ package com.thg.accelerator23.connectn.ai.ajtracey;
 
 import com.thehutgroup.accelerator.connectn.player.*;
 import com.thg.accelerator23.connectn.ai.ajtracey.analysis.BoardAnalyser;
-import com.thg.accelerator23.connectn.ai.ajtracey.analysis.GameState;
 
 import java.util.*;
 
@@ -15,6 +14,7 @@ public class LiveAndDirect extends Player {
   @Override
   public int makeMove(Board board) {
     BoardAnalyser BA = new BoardAnalyser(board.getConfig());
+
 
     List<Position> currentPositions = BA.getNextPositions(board);
 
