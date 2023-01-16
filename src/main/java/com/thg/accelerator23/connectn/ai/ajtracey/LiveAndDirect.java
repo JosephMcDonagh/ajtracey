@@ -16,17 +16,35 @@ public class LiveAndDirect extends Player {
   public int makeMove(Board board) {
     BoardAnalyser BA = new BoardAnalyser(board.getConfig());
 
-      if(BA.winningPositionExists(this.getCounter(), board)){
-        return BA.winningPosition(this.getCounter(),board);
-      } else if (BA.winningPositionExists(this.getCounter().getOther(), board)){
-      return BA.winningPosition(this.getCounter().getOther(), board);
 
-    } else {
-        List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
-        Random randomGen = new Random();
-        int thisXToBeUsed = randomGen.nextInt(theseAllHaveTheSameBinaryValue.size());
-        return theseAllHaveTheSameBinaryValue.get(thisXToBeUsed);
+    List<Position> currentPositions = BA.getNextPositions(board);
+    List<Position> winningPositions = BA.returnListOfPositionsForAWinCase(getCounter(), board);
+    List<Position> stopTheirWinPositions = BA.returnListOfPositionsForAWinCase(getCounter().getOther(), board);
+    List<Position> blackList =  BA.returnBlackListOfPositions(getCounter().getOther(), board);
+
+
+    for(int i = 0; i<winningPositions.size(); i++) {
+        if (!winningPositions.isEmpty() && currentPositions.contains(winningPositions.get(i)) && board.isWithinBoard(winningPositions.get(i))){
+            return winningPositions.get(i).getX();
+        }
+    }
+    for(int i=0; i<stopTheirWinPositions.size(); i++){
+        if (!stopTheirWinPositions.isEmpty() && currentPositions.contains(stopTheirWinPositions.get(i)) && board.isWithinBoard(stopTheirWinPositions.get(i))){
+            return stopTheirWinPositions.get(i).getX();
+        }
+    }
+
+    List<Integer> theseAllHaveTheSameBinaryValue = BA.returnsXValueForOurBestMove(board, getCounter());
+    Random randomGen = new Random();
+
+      for (int xValue: theseAllHaveTheSameBinaryValue) {
+
+
       }
+
+    int thisXToBeUsed = randomGen.nextInt(theseAllHaveTheSameBinaryValue.size());
+
+    return theseAllHaveTheSameBinaryValue.get(thisXToBeUsed);
 
 
     //TODO: some crazy analysis
