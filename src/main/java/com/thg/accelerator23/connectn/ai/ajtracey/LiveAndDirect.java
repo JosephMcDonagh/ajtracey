@@ -11,7 +11,6 @@ public class LiveAndDirect extends Player {
   public LiveAndDirect(Counter counter) {
     super(counter, LiveAndDirect.class.getName());
   }
-
   @Override
   public int makeMove(Board board) {
     BoardAnalyser BA = new BoardAnalyser(board.getConfig());
